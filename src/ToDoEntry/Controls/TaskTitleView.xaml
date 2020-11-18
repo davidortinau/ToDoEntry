@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Grid
+    ColumnDefinitions="40,*,40"
+    RowDefinitions="48"
+    VerticalOptions="Center"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="ToDoEntry.Controls.TaskTitleView"
+    xmlns:common="clr-namespace:Common.Styles"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:converters="clr-namespace:Xamarin.CommunityToolkit.Converters;assembly=Xamarin.CommunityToolkit">
+
+    <Grid.Resources>
+        <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+
+        <Style
+            TargetType="CheckBox">
+            <Setter
+                Property="Color"
+                Value="{StaticResource TextPrimaryColor_Dark}" />
+            <Setter
+                Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup
+                        x:Name="CommonStates">
+                        <VisualState
+                            x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter
+                                    Property="Color"
+                                    Value="{AppThemeBinding
+                                      Dark={StaticResource TextPrimaryColor_Dark},
+                                      Light={StaticResource TextPrimaryColor_Light}}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState
+                            x:Name="IsChecked">
+                            <VisualState.Setters>
+                                <Setter
+                                    Property="Color"
+                                    Value="{StaticResource ThemePrimary}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+
+        <!-- ENTRY -->
+        <Style
+            TargetType="Entry">
+            <Setter
+                Property="BackgroundColor"
+                Value="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light={StaticResource BackgroundColorLight}}" />
+            <Setter
+                Property="PlaceholderColor"
+                Value="{StaticResource NeutralSecondary}" />
+            <Setter
+                Property="TextColor"
+                Value="{AppThemeBinding
+                  Dark={StaticResource TextPrimaryColor_Dark},
+                  Light={StaticResource TextPrimaryColor_Light}}" />
+
+        </Style>
+
+        <Style
+            x:Key="FavoriteBtn"
+            TargetType="ImageButton">
+            <Setter
+                Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup
+                        x:Name="CommonStates">
+                        <VisualState
+                            x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter
+                                    Property="Source"
+                                    Value="{FontImage
+                                        FontFamily=Fabric,
+                                        Glyph={x:Static common:FabIconFont.FavoriteStar},
+                                        Size=22,
+                                        Color={StaticResource TextPrimaryColor_Light}}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState
+                            x:Name="IsFavorite">
+                            <VisualState.Setters>
+                                <Setter
+                                    Property="Source"
+                                    Value="{FontImage
+                                        FontFamily=Fabric,
+                                        Glyph={x:Static common:FabIconFont.FavoriteStarFill},
+                                        Size=22,
+                                        Color={StaticResource ThemePrimary}}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </Grid.Resources>
+
+    <CheckBox
+        Grid.Column="0"
+        IsChecked="{Binding IsCompleted, Mode=TwoWay}"
+        VerticalOptions="Center" />
+    <Entry
+        Grid.Column="1"
+        FontSize="18"
+        IsVisible="{Binding IsCompleted, Converter={StaticResource InvertedBoolConverter}}"
+        Placeholder="Add a task"
+        Text="{Binding Title}"
+        FontFamily="DMSans"
+        VerticalOptions="Center">
+        <Entry.Effects>
+            <xct:RemoveBorderEffect />
+        </Entry.Effects>
+    </Entry>
+    <Label
+        Grid.Column="1"
+        FontSize="18"
+        IsVisible="{Binding IsCompleted}"
+        FontFamily="DMSans"
+        TextDecorations="Strikethrough"
+        Text="{Binding Title}"
+        TextColor="{AppThemeBinding
+                  Dark={StaticResource TaskCompleted_Dark},
+                  Light={StaticResource TaskCompleted_Light}}"
+        CharacterSpacing="-0.1"
+        VerticalOptions="Center" />
+    <ImageButton
+        x:Name="Favorite"
+        Style="{StaticResource FavoriteBtn}"
+        VerticalOptions="Center"
+        Grid.Column="2"
+        HorizontalOptions="End"
+        Clicked="Favorite_Clicked"
+        />
+</Grid>
